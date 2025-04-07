@@ -2,7 +2,7 @@
 
 A powerful Ruby source code analysis and documentation management tool.
 
-![Metimur Logo](logo.png) <!-- You'd need to create/add this -->
+![Metimur Logo](logo.png)
 
 ## What is Metimur?
 
