@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "metimur"
+require "metimur/cli"
+
+Dry::CLI.new(Metimur::CLI::Commands).call
