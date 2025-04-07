@@ -1,0 +1,126 @@
+module Metimur
+  VERSION: String
+
+  class Error < StandardError
+  end
+
+  def self.parse_file: (String path) -> Models::SourceFile
+
+  def self.parse_directory: (String path) -> Models::SourceTree
+
+  def self.set_yard_comment: (String file_path, Integer line_number, String | Array[String] comment) -> void
+
+  def self.set_file_header_comment: (String file_path, String | Array[String] comment) -> void
+
+  def self.set_file_footer_comment: (String file_path, String | Array[String] comment) -> void
+
+  module Models
+    class SourceFile
+      attr_reader path: String
+      attr_reader classes: Array[SourceFileClass]
+      attr_reader methods: Array[SourceFileMethod]
+      attr_reader modules: Array[SourceFileModule]
+      attr_reader source_lines: Array[String]
+
+      def initialize: (String path) -> void
+      def add_class: (SourceFileClass klass) -> void
+      def add_method: (SourceFileMethod method) -> void
+      def add_module: (SourceFileModule mod) -> void
+      def read_lines: (Range[Integer]) -> Array[String]
+      def total_lines: -> Integer
+      def find_class: (String name) -> SourceFileClass?
+      def find_method: (String name) -> SourceFileMethod?
+      def find_module: (String name) -> SourceFileModule?
+      def to_h: -> Hash[Symbol, untyped]
+      def reload: -> void
+      def relative_path: (String base_path) -> String
+      def basename: -> String
+      def dirname: -> String
+      def extension: -> String
+    end
+
+    class SourceFileClass
+      attr_reader name: String
+      attr_reader source_file: SourceFile
+      attr_reader methods: Array[SourceFileMethod]
+      attr_reader comments: Array[String]
+      attr_reader start_line: Integer
+      attr_reader end_line: Integer
+      attr_accessor parent_node: untyped
+      attr_accessor path: Array[String]
+
+      def initialize: (name: String, source_file: SourceFile, start_line: Integer, end_line: Integer) -> void
+      def add_method: (SourceFileMethod method) -> void
+      def add_comment: (String comment) -> void
+      def metadata: -> Hash[Symbol, untyped]
+      def source_code: -> Array[String]
+      def update_location: (start_line: Integer, end_line: Integer) -> void
+      def namespace: -> String
+      def simple_name: -> String
+    end
+
+    class SourceFileMethod
+      attr_accessor name: String
+      attr_accessor start_line: Integer?
+      attr_accessor end_line: Integer?
+      attr_accessor visibility: Symbol
+      attr_accessor comments: Array[String]
+      attr_accessor parameters: Array[String]
+      attr_accessor path: Array[String]
+      attr_accessor parent_node: untyped
+      attr_reader source_file: SourceFile
+
+      def initialize: (SourceFile source_file, String name, Integer? start_line, Integer? end_line) -> void
+      def source: -> String?
+      def add_comment: (String comment) -> void
+      def add_parameter: (String parameter) -> void
+      def documented?: -> bool
+      def line_count: -> Integer
+      def to_h: -> Hash[Symbol, untyped]
+    end
+
+    class SourceFileModule
+      attr_reader name: String
+      attr_reader source_file: SourceFile
+      attr_reader methods: Array[SourceFileMethod]
+      attr_reader comments: Array[String]
+      attr_reader start_line: Integer
+      attr_reader end_line: Integer
+      attr_reader classes: Array[SourceFileClass]
+      attr_reader submodules: Array[SourceFileModule]
+      attr_accessor parent_node: untyped
+      attr_accessor path: Array[String]
+
+      def initialize: (name: String, source_file: SourceFile, start_line: Integer, end_line: Integer) -> void
+      def add_method: (SourceFileMethod method) -> void
+      def add_comment: (String comment) -> void
+      def add_class: (SourceFileClass klass) -> void
+      def add_submodule: (SourceFileModule submodule) -> void
+      def metadata: -> Hash[Symbol, untyped]
+      def source_code: -> Array[String]
+      def update_location: (start_line: Integer, end_line: Integer) -> void
+      def namespace: -> String
+      def simple_name: -> String
+      def full_name: -> String
+    end
+
+    class SourceTree
+      attr_reader root_path: String
+      attr_reader files: Array[SourceFile]
+
+      def initialize: (String root_path) -> void
+      def build_tree: -> void
+      def find_file: (String path) -> SourceFile?
+      def find_files_by_class: (String class_name) -> Array[SourceFile]
+      def find_files_by_method: (String method_name) -> Array[SourceFile]
+      def total_classes: -> Integer
+      def total_methods: -> Integer
+      def total_lines: -> Integer
+      def to_h: -> Hash[Symbol, untyped]
+      def reload: -> void
+
+      private
+      def relative_path: (String path) -> String
+    end
+  end
+end

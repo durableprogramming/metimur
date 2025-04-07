@@ -8,6 +8,9 @@
   packages = [ pkgs.git ];
 
   languages.ruby.enable = true;
+  
+  languages.python.enable = true;
+  languages.python.venv.enable = true;
 
 
   # https://devenv.sh/scripts/
