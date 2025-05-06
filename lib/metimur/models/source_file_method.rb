@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# The SourceFileMethod model represents a method within a Ruby source file. It tracks the method name, position, visibility, parameters, and comments. The class provides functionality to manage method metadata and relationships with parent classes or modules. It supports comprehensive source code analysis by storing method characteristics including documentation status and parameter information, enabling detailed code inspection and documentation generation.
+
 module Metimur
   module Models
     class SourceFileMethod
@@ -66,3 +68,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

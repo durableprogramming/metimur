@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+# The SetFileHeaderComment class handles adding comments to the beginning of Ruby source files.
+# It supports adding standardized header comments such as copyright notices or
+# license information by removing any existing header comments and adding new ones.
+# This ensures consistent header styling across a codebase.
+
 module Metimur
   module Actions
     class SetFileHeaderComment
@@ -17,9 +24,7 @@ module Metimur
       private
 
       def remove_existing_header_comments(lines)
-        while !lines.empty? && comment_line?(lines.first)
-          lines.shift
-        end
+        lines.shift while !lines.empty? && comment_line?(lines.first)
       end
 
       def insert_new_header_comments(lines)
@@ -29,7 +34,7 @@ module Metimur
       end
 
       def comment_line?(line)
-        line.strip.start_with?('#')
+        line.strip.start_with?("#")
       end
 
       def write_file(lines)
@@ -38,3 +43,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

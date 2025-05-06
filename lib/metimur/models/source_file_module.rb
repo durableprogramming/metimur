@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# The SourceFileModule model represents a module within a Ruby source file. It tracks the module name, methods, classes, submodules, and location within the file. This class provides functionality to manage module metadata, including adding methods and classes, handling comments, and determining relationships with other code elements. It supports hierarchical representation of Ruby modules with full namespace awareness and position tracking for precise source navigation.
+
 module Metimur
   module Models
     class SourceFileModule
@@ -91,3 +93,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

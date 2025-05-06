@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# The ParseSourceCode class provides the core Ruby source code parsing functionality for Metimur. It traverses abstract syntax trees to identify and extract structural elements like classes, modules, and methods from Ruby files. This class handles the complex parsing logic, tracking hierarchical relationships between code elements, and populates the model objects that represent the source code structure. It serves as the bridge between raw source files and Metimur's analyzable code representation.
+
 require_relative "models/source_file"
 require_relative "models/source_file_module"
 require_relative "models/source_file_class"
@@ -27,13 +29,12 @@ module Metimur
       buffer.source = File.read(@source_file.path)
       parser = Parser::CurrentRuby.new
       ast = parser.parse(buffer)
-     path = []
       process_node(ast)
     rescue Parser::SyntaxError => e
       raise Error, "Syntax error in #{@source_file.path}: #{e.message}"
     end
 
-    def process_node(node, parent_node: nil, path:[])
+    def process_node(node, parent_node: nil, path: [])
       return unless node.is_a?(Parser::AST::Node)
 
       case node.type
@@ -46,10 +47,9 @@ module Metimur
       else
         node.children.each { |child| process_node(child, path: path, parent_node: parent_node) }
       end
-
     end
 
-    def process_class_node(node, path:[], parent_node: nil)
+    def process_class_node(node, path: [], parent_node: nil)
       name = extract_constant_name(node.children[0])
       start_line = node.location.line
       end_line = node.location.last_line
@@ -60,9 +60,7 @@ module Metimur
         start_line: start_line,
         end_line: end_line
       )
-      if parent_node
-        klass.parent_node = parent_node
-      end
+      klass.parent_node = parent_node if parent_node
       klass.path = path
 
       if @current_module
@@ -72,13 +70,12 @@ module Metimur
       end
 
       new_path = path + [name]
-      node.children.each { |child| 
-        process_node(child, path: new_path, parent_node: klass) 
-      }
-
+      node.children.each do |child|
+        process_node(child, path: new_path, parent_node: klass)
+      end
     end
 
-    def process_module_node(node, path:[], parent_node: nil)
+    def process_module_node(node, path: [], parent_node: nil)
       name = extract_constant_name(node.children[0])
       start_line = node.location.line
       end_line = node.location.last_line
@@ -89,9 +86,7 @@ module Metimur
         start_line: start_line,
         end_line: end_line
       )
-      if parent_node
-        klass.parent_node = parent_node
-      end
+      mod.parent_node = parent_node if parent_node
 
       if @current_module
         @current_module.add_submodule(mod)
@@ -102,16 +97,12 @@ module Metimur
       new_path = path + [name]
 
       node.children.each { |child| process_node(child, path: new_path, parent_node: mod) }
-
     end
 
-    def process_method_node(node, path:[], parent_node:nil)
-
+    def process_method_node(node, path: [], parent_node: nil)
       name = node.children[0].to_s
 
-      if name == '(self)'
-        name = 'self.' + node.children[1].to_s
-      end
+      name = "self.#{node.children[1]}" if name == "(self)"
 
       start_line = node.location.line
       end_line = node.location.last_line
@@ -120,10 +111,7 @@ module Metimur
       method.path = path
       method.parent_node = parent_node
 
-      if parent_node
-        method.parent_node = parent_node
-      end
-
+      method.parent_node = parent_node if parent_node
 
       process_method_parameters(node, method)
 
@@ -157,3 +145,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

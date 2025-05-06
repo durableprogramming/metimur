@@ -1,4 +1,8 @@
-require 'json'
+# frozen_string_literal: true
+
+# The ParseFile command provides functionality to analyze Ruby source files and display their structure. It parses a file to extract metadata about classes, modules, and methods, presenting the information in either text or JSON format. The command supports detailed output that shows nested elements like methods within classes. This serves as a primary entry point for users to understand their codebase structure through the command line interface.
+
+require "json"
 
 module Metimur
   module CLI
@@ -41,20 +45,20 @@ module Metimur
           puts "\nClasses (#{source_file.classes.count}):"
           source_file.classes.each do |klass|
             puts "  #{klass.name} (#{klass.start_line}..#{klass.end_line})"
-            if details
-              klass.methods.each do |method|
-                puts "    - #{method.name} (#{method.start_line}..#{method.end_line})"
-              end
+            next unless details
+
+            klass.methods.each do |method|
+              puts "    - #{method.name} (#{method.start_line}..#{method.end_line})"
             end
           end
 
           puts "\nModules (#{source_file.modules.count}):"
           source_file.modules.each do |mod|
             puts "  #{mod.name} (#{mod.start_line}..#{mod.end_line})"
-            if details
-              mod.methods.each do |method|
-                puts "    - #{method.name} (#{method.start_line}..#{method.end_line})"
-              end
+            next unless details
+
+            mod.methods.each do |method|
+              puts "    - #{method.name} (#{method.start_line}..#{method.end_line})"
             end
           end
 
@@ -67,3 +71,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

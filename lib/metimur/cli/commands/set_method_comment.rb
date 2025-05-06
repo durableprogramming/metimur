@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# The SetMethodComment command provides functionality to add or update documentation for methods in Ruby source files. It locates methods either by name or line number in any context (top-level, class, or module). The command supports both YARD-style and plain comments, handling proper formatting and indentation. This ensures consistent documentation of method behavior, parameters, and return values throughout a codebase.
+
 module Metimur
   module CLI
     module Commands
@@ -18,35 +22,34 @@ module Metimur
         ]
 
         def call(path:, method_name:, comment:, line_number: nil, type: "yard", **)
-          begin
-            source_file = Metimur.parse_file(path)
-            
-            if line_number.nil?
-              method = find_method(source_file, method_name)
-              raise Error, "Method '#{method_name}' not found in #{path}" unless method
-              line_number = method.start_line
-            end
+          source_file = Metimur.parse_file(path)
 
-            lines = File.readlines(path)
-            
-            case type
-            when "yard"
-              action = Actions::SetYardComment.new
-              result = action.call(lines.join, line_number, comment)
-              File.write(path, result.join("\n"))
-            else
-              action = Actions::SetFileHeaderComment.new(path, comment)
-              action.call
-            end
+          if line_number.nil?
+            method = find_method(source_file, method_name)
+            raise Error, "Method '#{method_name}' not found in #{path}" unless method
 
-            puts "Comment updated successfully for method '#{method_name}'"
-          rescue Errno::ENOENT
-            puts "Error: File not found - #{path}"
-            exit(1)
-          rescue Metimur::Error => e
-            puts "Error: #{e.message}"
-            exit(1)
+            line_number = method.start_line
           end
+
+          lines = File.readlines(path)
+
+          case type
+          when "yard"
+            action = Actions::SetYardComment.new
+            result = action.call(lines.join, line_number, comment)
+            File.write(path, result.join("\n"))
+          else
+            action = Actions::SetFileHeaderComment.new(path, comment)
+            action.call
+          end
+
+          puts "Comment updated successfully for method '#{method_name}'"
+        rescue Errno::ENOENT
+          puts "Error: File not found - #{path}"
+          exit(1)
+        rescue Metimur::Error => e
+          puts "Error: #{e.message}"
+          exit(1)
         end
 
         private
@@ -60,3 +63,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

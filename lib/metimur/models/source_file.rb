@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+# The SourceFile class represents a Ruby source code file and provides functionality
+# to track code structure elements like classes, modules, and methods. It manages
+# the file's content and structural information, supports metadata extraction, and
+# offers methods for locating specific elements within the file. This is a core model
+# in the Metimur system that enables source code analysis and documentation.
+
 module Metimur
   module Models
     class SourceFile
@@ -91,3 +97,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

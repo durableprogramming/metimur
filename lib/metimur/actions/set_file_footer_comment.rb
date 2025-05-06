@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+# The SetFileFooterComment class handles appending comments to the end of Ruby source files.
+# It supports adding standardized footer comments such as copyright notices or
+# license information by removing any existing footer comments and adding new ones.
+# This ensures consistent footer styling across a codebase.
+
 module Metimur
   module Actions
     class SetFileFooterComment
@@ -17,9 +24,7 @@ module Metimur
       private
 
       def remove_existing_footer_comments(lines)
-        while !lines.empty? && comment_line?(lines.last)
-          lines.pop
-        end
+        lines.pop while !lines.empty? && comment_line?(lines.last)
       end
 
       def append_new_footer_comments(lines)
@@ -30,7 +35,7 @@ module Metimur
       end
 
       def comment_line?(line)
-        line.strip.start_with?('#')
+        line.strip.start_with?("#")
       end
 
       def write_file(lines)
@@ -39,3 +44,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

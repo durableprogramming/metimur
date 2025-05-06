@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# The SetClassComment command provides functionality to add or update documentation for classes in Ruby source files. It allows users to specify a class by name or line number and add either plain comments or YARD-style documentation. The command automatically handles the insertion of properly formatted comments above the target class definition, preserving existing code structure. It can find classes in nested structures like modules.
+
 module Metimur
   module CLI
     module Commands
@@ -16,35 +20,34 @@ module Metimur
         ]
 
         def call(path:, class_name:, comment:, line_number: nil, type: "yard", **)
-          begin
-            source_file = Metimur.parse_file(path)
-            
-            if line_number.nil?
-              klass = find_class(source_file, class_name)
-              raise Error, "Class '#{class_name}' not found in #{path}" unless klass
-              line_number = klass.start_line
-            end
+          source_file = Metimur.parse_file(path)
 
-            lines = File.readlines(path)
-            
-            case type
-            when "yard"
-              action = Actions::SetYardComment.new
-              result = action.call(lines.join, line_number, comment)
-              File.write(path, result.join("\n"))
-            else
-              action = Actions::SetFileHeaderComment.new(path, comment)
-              action.call
-            end
+          if line_number.nil?
+            klass = find_class(source_file, class_name)
+            raise Error, "Class '#{class_name}' not found in #{path}" unless klass
 
-            puts "Comment updated successfully for class '#{class_name}'"
-          rescue Errno::ENOENT
-            puts "Error: File not found - #{path}"
-            exit(1)
-          rescue Metimur::Error => e
-            puts "Error: #{e.message}"
-            exit(1)
+            line_number = klass.start_line
           end
+
+          lines = File.readlines(path)
+
+          case type
+          when "yard"
+            action = Actions::SetYardComment.new
+            result = action.call(lines.join, line_number, comment)
+            File.write(path, result.join("\n"))
+          else
+            action = Actions::SetFileHeaderComment.new(path, comment)
+            action.call
+          end
+
+          puts "Comment updated successfully for class '#{class_name}'"
+        rescue Errno::ENOENT
+          puts "Error: File not found - #{path}"
+          exit(1)
+        rescue Metimur::Error => e
+          puts "Error: #{e.message}"
+          exit(1)
         end
 
         private
@@ -57,3 +60,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

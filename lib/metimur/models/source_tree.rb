@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# The SourceTree model represents a collection of Ruby source files within a directory structure. It manages file discovery, tracking, and analysis at the project level. This class provides methods for finding files by class or method name, calculating code statistics, and managing the hierarchical relationships between files. It serves as the entry point for whole-project analysis, enabling operations across the entire codebase rather than on individual files.
+
 module Metimur
   module Models
     class SourceTree
@@ -67,3 +69,5 @@ module Metimur
     end
   end
 end
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

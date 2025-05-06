@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+# # Metimur - Ruby source code metadata utility
+# # A library for parsing, analyzing, and manipulating Ruby source code metadata.
+# # This is the main entry point for the Metimur library, providing methods for
+# # parsing files, directories, and updating comments in Ruby source code.
+
 module Metimur
   class Error < StandardError; end
 
@@ -45,3 +52,5 @@ require_relative "metimur/actions/set_yard_comment"
 require_relative "metimur/actions/set_file_header_comment"
 require_relative "metimur/actions/set_file_footer_comment"
 require_relative "metimur/cli"
+
+# Copyright (c) 2025 Durable Programming, LLC. All rights reserved.

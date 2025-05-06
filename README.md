@@ -167,7 +167,7 @@ We welcome contributions! Here's how you can help:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/metimur.git
+git clone https://github.com/durableprogramming/metimur.git
 
 # Install dependencies
 cd metimur
@@ -188,9 +188,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 Need help? Have questions?
 
-- Create an issue: [https://github.com/yourusername/metimur/issues](https://github.com/yourusername/metimur/issues)
+- Create an issue: [https://github.com/durableprogramming/metimur/issues](https://github.com/yourusername/metimur/issues)
 - Email: support@metimur.example.com
-- Documentation: [https://metimur.example.com/docs](https://metimur.example.com/docs)
+- Documentation: [https://metimur.durableprogramming.com/docs](https://metimur.durableprogramming.com/docs)
 
 ---
 
